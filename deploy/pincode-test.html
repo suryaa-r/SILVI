@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pincode Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8">
+    <h1 class="text-2xl mb-4">Pincode Test</h1>
+    
+    <div class="mb-4">
+        <input type="text" id="pincodeInput" placeholder="Enter pincode" class="border p-2 mr-2">
+        <button onclick="testPincode()" class="bg-blue-500 text-white px-4 py-2">Test</button>
+    </div>
+    
+    <div id="result" class="mt-4 p-4 border"></div>
+    
+    <script src="csv-pincode-loader.js"></script>
+    <script>
+        async function testPincode() {
+            const pincode = document.getElementById('pincodeInput').value;
+            const result = document.getElementById('result');
+            
+            result.innerHTML = 'Loading...';
+            
+            try {
+                await csvPincodeLoader.loadCSVData();
+                const info = await csvPincodeLoader.getPincodeInfo(pincode);
+                
+                if (info) {
+                    result.innerHTML = `
+                        <h3>Found:</h3>
+                        <p>Pincode: ${info.pincode}</p>
+                        <p>City: ${info.city}</p>
+                        <p>District: ${info.district}</p>
+                        <p>State: ${info.state}</p>
+                        <p>Post Offices: ${info.postOffices.length}</p>
+                    `;
+                } else {
+                    result.innerHTML = 'PIN code not found';
+                }
+                
+                const stats = csvPincodeLoader.getStats();
+                result.innerHTML += `<br><br>Stats: ${stats.totalPincodes} pincodes loaded`;
+                
+            } catch (error) {
+                result.innerHTML = 'Error: ' + error.message;
+                console.error(error);
+            }
+        }
+        
+        // Test with common pincodes
+        window.onload = () => {
+            document.getElementById('pincodeInput').value = '110001';
+        };
+    </script>
+</body>
+</html>

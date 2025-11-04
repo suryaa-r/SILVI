@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - SILVI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sage-green: #9CAF88;
+            --champagne-beige: #F5F1E8;
+            --deep-forest: #4A5D3A;
+            --pearl-white: #FEFCF8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--pearl-white) 0%, var(--champagne-beige) 100%);
+        }
+        
+        .luxury-font { font-family: 'Playfair Display', serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-luxury {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-luxury:hover { transform: translateY(-2px); }
+        
+        .step-active { background: var(--sage-green); color: white; }
+        .step-completed { background: var(--deep-forest); color: white; }
+        .step-inactive { background: #e5e7eb; color: #6b7280; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-5 backdrop-blur-lg bg-white/90">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="luxury-font text-3xl font-bold gradient-text">SILVI</a>
+            <div class="text-lg font-medium text-gray-600">Secure Checkout</div>
+        </div>
+    </nav>
+
+    <!-- Checkout Process -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Progress Steps -->
+            <div class="flex justify-center mb-12">
+                <div class="flex items-center space-x-4">
+                    <div class="step step-active w-10 h-10 rounded-full flex items-center justify-center font-bold">1</div>
+                    <div class="w-16 h-1 bg-gray-300"></div>
+                    <div class="step step-inactive w-10 h-10 rounded-full flex items-center justify-center font-bold">2</div>
+                    <div class="w-16 h-1 bg-gray-300"></div>
+                    <div class="step step-inactive w-10 h-10 rounded-full flex items-center justify-center font-bold">3</div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-12">
+                <!-- Checkout Form -->
+                <div class="lg:col-span-2">
+                    <!-- Cart Information -->
+                    <div id="step-1" class="checkout-step">
+                        <h2 class="luxury-font text-3xl font-bold gradient-text mb-8">Cart Information</h2>
+                        <div id="checkout-cart-items" class="space-y-4 mb-8">
+                            <!-- Cart items will be loaded here -->
+                        </div>
+                        <button onclick="nextStep(2)" class="btn-luxury text-white px-8 py-3 rounded-lg font-semibold">Continue to Shipping</button>
+                    </div>
+
+                    <!-- Shipping Information -->
+                    <div id="step-2" class="checkout-step hidden">
+                        <h2 class="luxury-font text-3xl font-bold gradient-text mb-8">Shipping Information</h2>
+                        <form class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <input type="text" placeholder="First Name" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                                <input type="text" placeholder="Last Name" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                            </div>
+                            <input type="email" placeholder="Email Address" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                            <input type="tel" placeholder="Phone Number" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                            <input type="text" placeholder="Address" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <input type="text" id="zipcode" placeholder="PIN Code" maxlength="6" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" oninput="validatePincode(this.value)" required>
+                                <input type="text" id="city" placeholder="City" class="w-full px-4 py-3 border rounded-lg bg-gray-50" readonly>
+                                <input type="text" id="state" placeholder="State" class="w-full px-4 py-3 border rounded-lg bg-gray-50" readonly>
+                            </div>
+                            <div id="pincode-suggestions" class="mt-2 bg-white border rounded-lg shadow-lg hidden max-h-64 overflow-y-auto z-10 relative"></div>
+                            <div id="delivery-info" class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg hidden">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-green-800 font-semibold">Delivery Available</span>
+                                </div>
+                                <div id="delivery-details" class="text-sm text-green-700"></div>
+                            </div>
+                            <div id="validation-error" class="text-red-500 text-sm hidden"></div>
+                            <div class="flex space-x-4">
+                                <button type="button" onclick="nextStep(1)" class="border-2 border-green-800 text-green-800 px-6 py-3 rounded-lg font-semibold hover:bg-green-800 hover:text-white transition-all">Back</button>
+                                <button type="button" onclick="validateAndProceed()" class="btn-luxury text-white px-8 py-3 rounded-lg font-semibold">Continue to Payment</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Payment Information -->
+                    <div id="step-3" class="checkout-step hidden">
+                        <h2 class="luxury-font text-3xl font-bold gradient-text mb-8">Payment Information</h2>
+                        <form class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Payment Method</label>
+                                <div class="space-y-3">
+                                    <label class="flex items-center space-x-3 p-4 border-2 border-blue-500 rounded-lg cursor-pointer hover:bg-blue-50 bg-blue-25">
+                                        <input type="radio" name="payment" value="razorpay" class="text-blue-600" checked>
+                                        <div class="flex items-center space-x-3">
+                                            <img src="https://razorpay.com/assets/razorpay-logo.svg" alt="Razorpay" class="h-6">
+                                            <div>
+                                                <div class="font-semibold text-blue-800">Razorpay (Recommended)</div>
+                                                <div class="text-sm text-blue-600">UPI, Cards, NetBanking, Wallets</div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <label id="cod-option" class="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 hidden">
+                                        <input type="radio" name="payment" value="cod" class="text-green-800">
+                                        <span>Cash on Delivery (COD)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button type="button" onclick="nextStep(2)" class="border-2 border-green-800 text-green-800 px-6 py-3 rounded-lg font-semibold hover:bg-green-800 hover:text-white transition-all">Back</button>
+                                <button type="button" onclick="completeOrder()" class="btn-luxury text-white px-8 py-3 rounded-lg font-semibold">Complete Order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg sticky top-32">
+                        <h3 class="luxury-font text-xl font-bold mb-6">Order Summary</h3>
+                        <div id="order-summary" class="space-y-4 mb-6">
+                            <!-- Order summary will be loaded here -->
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between mb-2">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span>Shipping:</span>
+                                <span id="shipping-cost">Calculating...</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span>Tax:</span>
+                                <span id="tax">$0.00</span>
+                            </div>
+                            <div class="flex justify-between text-xl font-bold">
+                                <span>Total:</span>
+                                <span id="total">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="pincode-service.js"></script>
+    <script>
+        let currentStep = 1;
+        let cart = JSON.parse(localStorage.getItem('silvi_cart') || '[]');
+        let deliveryInfo = null;
+
+        function loadCheckoutData() {
+            // Load cart items
+            const cartContainer = document.getElementById('checkout-cart-items');
+            cartContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center space-x-4 p-4 bg-white rounded-lg shadow">
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+                    <div class="flex-1">
+                        <h4 class="font-semibold">${item.name}</h4>
+                        <p class="text-gray-600">Quantity: ${item.quantity}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold">₹${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Load order summary
+            const summaryContainer = document.getElementById('order-summary');
+            summaryContainer.innerHTML = cart.map(item => `
+                <div class="flex justify-between">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>₹${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.18; // 18% GST
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+            
+            const shippingElement = document.getElementById('shipping-cost');
+            shippingElement.textContent = 'Enter PIN code';
+            shippingElement.className = 'text-blue-600 cursor-pointer';
+            shippingElement.onclick = () => document.getElementById('zipcode').focus();
+        }
+
+        function nextStep(step) {
+            // Hide current step
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((el, index) => {
+                el.classList.remove('step-active', 'step-completed', 'step-inactive');
+                if (index + 1 < step) {
+                    el.classList.add('step-completed');
+                } else if (index + 1 === step) {
+                    el.classList.add('step-active');
+                } else {
+                    el.classList.add('step-inactive');
+                }
+            });
+            
+            // Show new step
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+            currentStep = step;
+        }
+
+        async function validatePincode(pincode) {
+            const errorDiv = document.getElementById('validation-error');
+            const deliveryDiv = document.getElementById('delivery-info');
+            
+            // Clear previous states
+            errorDiv.classList.add('hidden');
+            deliveryDiv.classList.add('hidden');
+            
+            if (pincode.length !== 6) {
+                document.getElementById('city').value = '';
+                document.getElementById('state').value = '';
+                return;
+            }
+
+            // Wait for pincode service to load
+            if (!window.pincodeService.pincodeData) {
+                await new Promise(resolve => {
+                    const checkLoaded = () => {
+                        if (window.pincodeService.pincodeData) {
+                            resolve();
+                        } else {
+                            setTimeout(checkLoaded, 100);
+                        }
+                    };
+                    checkLoaded();
+                });
+            }
+            
+            const deliveryData = window.pincodeService.getDeliveryInfo(pincode);
+            console.log('Pincode:', pincode, 'DeliveryData:', deliveryData);
+            if (deliveryData) {
+                document.getElementById('city').value = deliveryData.city;
+                document.getElementById('state').value = deliveryData.state;
+                
+                deliveryDiv.classList.remove('hidden');
+                document.getElementById('delivery-details').innerHTML = `
+                    <p><strong>Location:</strong> ${deliveryData.city}, ${deliveryData.district}, ${deliveryData.state}</p>
+                    <p><strong>Estimated Delivery:</strong> ${deliveryData.deliveryDays} business days</p>
+                    <p><strong>Delivery Charge:</strong> ${deliveryData.deliveryCharge === 0 ? 'Free' : '₹' + deliveryData.deliveryCharge}</p>
+                    <p><strong>COD Available:</strong> ${deliveryData.codAvailable ? 'Yes' : 'No'}</p>
+                `;
+                deliveryInfo = { available: true, ...deliveryData };
+                updateShippingCost(deliveryData.deliveryCharge);
+                
+                // Show/hide COD option based on availability
+                const codOption = document.getElementById('cod-option');
+                if (deliveryData.codAvailable) {
+                    codOption.classList.remove('hidden');
+                } else {
+                    codOption.classList.add('hidden');
+                    // If COD was selected but not available, switch to card
+                    const codRadio = codOption.querySelector('input[type="radio"]');
+                    if (codRadio && codRadio.checked) {
+                        document.querySelector('input[name="payment"][value="card"]').checked = true;
+                    }
+                }
+                return;
+            }
+            
+            // Show error if not found
+            document.getElementById('city').value = '';
+            document.getElementById('state').value = '';
+            errorDiv.innerHTML = 'PIN code not found. Please check and try again.';
+            errorDiv.classList.remove('hidden');
+            deliveryInfo = { available: false };
+            console.log('Pincode not found:', pincode);
+        }
+
+        function getSimilarPincodes(partial) {
+            if (!window.pincodeService.pincodeData) return [];
+            return window.pincodeService.pincodeData
+                .filter(loc => loc.Pincode.startsWith(partial))
+                .slice(0, 5);
+        }
+
+        // Add real-time PIN code formatting and suggestions
+        document.addEventListener('DOMContentLoaded', function() {
+            const pincodeInput = document.getElementById('zipcode');
+            const suggestionsDiv = document.getElementById('pincode-suggestions');
+            
+            if (pincodeInput) {
+                pincodeInput.addEventListener('input', function(e) {
+                    // Only allow numbers and limit to 6 digits
+                    this.value = this.value.replace(/[^0-9]/g, '').substring(0, 6);
+                    
+                    // Show suggestions for partial input
+                    if (this.value.length >= 3 && this.value.length < 6) {
+                        showSimilarPincodes(this.value);
+                    } else {
+                        suggestionsDiv.classList.add('hidden');
+                    }
+                });
+                
+                // Hide suggestions when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!pincodeInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                        suggestionsDiv.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        function showSimilarPincodes(pincode) {
+            const suggestionsDiv = document.getElementById('pincode-suggestions');
+            const suggestions = getSimilarPincodes(pincode);
+            
+            if (suggestions.length > 0) {
+                suggestionsDiv.innerHTML = `
+                    <div class="p-2 bg-gray-50 text-sm font-medium border-b">Suggested PIN codes:</div>
+                    ${suggestions.map(loc => `
+                        <div class="p-3 hover:bg-gray-50 cursor-pointer border-b" onclick="selectPincode('${loc.Pincode}')">
+                            <div class="font-medium">${loc.Pincode} - ${loc.City}</div>
+                            <div class="text-sm text-gray-600">${loc.PostOfficeName}, ${loc.State}</div>
+                        </div>
+                    `).join('')}
+                `;
+                suggestionsDiv.classList.remove('hidden');
+            }
+        }
+
+        function selectPincode(pincode) {
+            document.getElementById('zipcode').value = pincode;
+            validatePincode(pincode);
+        }
+
+        function updateShippingCost(shippingCost) {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            const shippingElement = document.getElementById('shipping-cost');
+            if (shippingCost === 0) {
+                shippingElement.textContent = 'Free';
+                shippingElement.className = 'text-green-600 font-semibold';
+            } else {
+                shippingElement.textContent = `₹${shippingCost}`;
+                shippingElement.className = '';
+            }
+            
+            // Update total
+            const tax = subtotal * 0.18; // 18% GST
+            const total = subtotal + tax + shippingCost;
+            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+        }
+
+        function validateAndProceed() {
+            const zipcode = document.getElementById('zipcode').value.trim();
+            const errorDiv = document.getElementById('validation-error');
+
+            if (!zipcode || zipcode.length !== 6) {
+                errorDiv.textContent = 'Please enter a valid 6-digit PIN code.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            if (!deliveryInfo || !deliveryInfo.available) {
+                errorDiv.textContent = 'Delivery not available to this location.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            errorDiv.classList.add('hidden');
+            nextStep(3);
+        }
+
+        function completeOrder() {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+            
+            if (selectedPayment === 'razorpay') {
+                initiateRazorpayPayment();
+            } else if (selectedPayment === 'cod') {
+                completeCODOrder();
+            } else {
+                // Handle other payment methods
+                alert('Order completed successfully! Thank you for shopping with SILVI.');
+                localStorage.removeItem('silvi_cart');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function initiateRazorpayPayment() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.18;
+            const shippingCost = deliveryInfo ? deliveryInfo.deliveryCharge : 0;
+            const total = subtotal + tax + shippingCost;
+            
+            const options = {
+                key: 'rzp_test_1234567890', // Replace with your Razorpay key
+                amount: Math.round(total * 100), // Amount in paise
+                currency: 'INR',
+                name: 'SILVI',
+                description: 'Luxury Women\'s Clothing',
+                image: 'https://your-logo-url.com/logo.png',
+                order_id: 'order_' + Date.now(), // Generate order ID
+                handler: function (response) {
+                    // Payment successful
+                    console.log('Payment successful:', response);
+                    showPaymentSuccess(response.razorpay_payment_id);
+                },
+                prefill: {
+                    name: document.querySelector('input[placeholder="First Name"]').value + ' ' + document.querySelector('input[placeholder="Last Name"]').value,
+                    email: document.querySelector('input[placeholder="Email Address"]').value,
+                    contact: document.querySelector('input[placeholder="Phone Number"]').value
+                },
+                notes: {
+                    address: document.querySelector('input[placeholder="Address"]').value,
+                    pincode: document.getElementById('zipcode').value
+                },
+                theme: {
+                    color: '#9CAF88'
+                },
+                modal: {
+                    ondismiss: function() {
+                        console.log('Payment cancelled by user');
+                    }
+                }
+            };
+            
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        function showPaymentSuccess(paymentId) {
+            // Create success modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="luxury-font text-2xl font-bold text-green-800 mb-2">Payment Successful!</h3>
+                    <p class="text-gray-600 mb-4">Your order has been placed successfully.</p>
+                    <p class="text-sm text-gray-500 mb-6">Payment ID: ${paymentId}</p>
+                    <button onclick="completeOrderSuccess()" class="btn-luxury text-white px-8 py-3 rounded-lg font-semibold w-full">
+                        Continue Shopping
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function completeCODOrder() {
+            alert('Order placed successfully! You will pay cash on delivery.');
+            localStorage.removeItem('silvi_cart');
+            window.location.href = 'index.html';
+        }
+
+        function completeOrderSuccess() {
+            localStorage.removeItem('silvi_cart');
+            window.location.href = 'index.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                window.location.href = 'products.html';
+                return;
+            }
+            loadCheckoutData();
+        });
+    </script>
+</body>
+</html>

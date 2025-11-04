@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage - SILVI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sage-green: #9CAF88;
+            --champagne-beige: #F5F1E8;
+            --deep-forest: #4A5D3A;
+            --pearl-white: #FEFCF8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--pearl-white) 0%, var(--champagne-beige) 100%);
+        }
+        
+        .luxury-font { font-family: 'Playfair Display', serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-luxury {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-luxury:hover { transform: translateY(-2px); }
+        
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-5 backdrop-blur-lg bg-white/90">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="luxury-font text-3xl font-bold gradient-text">SILVI</a>
+            
+            <div class="hidden lg:flex items-center space-x-10">
+                <a href="index.html" class="text-gray-800 hover:text-green-800 transition-colors font-medium">Home</a>
+                <a href="products.html" class="text-gray-800 hover:text-green-800 transition-colors font-medium">Collections</a>
+                <a href="brand.html" class="text-green-800 font-semibold">Heritage</a>
+                <a href="#" class="text-gray-800 hover:text-green-800 transition-colors font-medium">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="hidden md:flex items-center space-x-4">
+                    <button class="text-gray-700 hover:text-green-800 font-medium text-sm">Login</button>
+                    <button class="btn-luxury text-white px-5 py-2 rounded-full text-sm font-medium">Sign Up</button>
+                </div>
+                
+                <button class="cart-toggle p-2 hover:bg-gray-100 rounded-full relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9"></path>
+                    </svg>
+                    <span class="cart-count absolute -top-1 -right-1 bg-green-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" style="display: none;">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="parallax pt-32 pb-20 px-6 min-h-screen flex items-center" style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200');">
+        <div class="max-w-7xl mx-auto text-center text-white">
+            <h1 class="luxury-font text-6xl md:text-8xl font-bold mb-6">Our Heritage</h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto">Crafting luxury fashion with artisanal precision since our inception</p>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="luxury-font text-4xl font-bold gradient-text mb-8">The SILVI Story</h2>
+                    <div class="space-y-6 text-lg text-gray-600 leading-relaxed">
+                        <p>Founded with a vision to bridge the gap between traditional craftsmanship and contemporary luxury, SILVI emerged as a beacon of elegance in the fashion world.</p>
+                        <p>Our journey began with a simple belief: that every woman deserves to feel extraordinary. This philosophy drives our commitment to creating pieces that not only look beautiful but tell a story of heritage, quality, and timeless sophistication.</p>
+                        <p>Each SILVI creation is a testament to our dedication to excellence, combining the finest materials with meticulous attention to detail that has become our signature.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600" alt="Artisan at work" class="w-full h-96 object-cover rounded-2xl shadow-2xl">
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-green-800 to-green-600 rounded-2xl opacity-20"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-20 px-6 bg-gradient-to-r from-green-50 to-green-100">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="luxury-font text-4xl font-bold gradient-text mb-16">Our Values</h2>
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="w-16 h-16 bg-green-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="luxury-font text-xl font-bold mb-4">Excellence</h3>
+                    <p class="text-gray-600">We pursue perfection in every stitch, every detail, and every interaction with our customers.</p>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="w-16 h-16 bg-green-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9"></path>
+                        </svg>
+                    </div>
+                    <h3 class="luxury-font text-xl font-bold mb-4">Sustainability</h3>
+                    <p class="text-gray-600">Our commitment to the environment drives us to source responsibly and create lasting pieces.</p>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="w-16 h-16 bg-green-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="luxury-font text-xl font-bold mb-4">Authenticity</h3>
+                    <p class="text-gray-600">Every piece reflects genuine craftsmanship and the authentic spirit of luxury fashion.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Craftsmanship Section -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="luxury-font text-4xl font-bold gradient-text mb-6">Artisanal Craftsmanship</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Behind every SILVI piece lies hours of meticulous work by skilled artisans who have perfected their craft over generations.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600" alt="Craftsmanship" class="w-full h-96 object-cover rounded-2xl shadow-2xl">
+                </div>
+                <div class="order-1 md:order-2">
+                    <h3 class="luxury-font text-3xl font-bold mb-6">The Art of Creation</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-white text-sm font-bold">1</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Material Selection</h4>
+                                <p class="text-gray-600">We source only the finest fabrics from trusted suppliers worldwide.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-white text-sm font-bold">2</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Design & Pattern</h4>
+                                <p class="text-gray-600">Each design is carefully crafted to ensure perfect fit and timeless appeal.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-white text-sm font-bold">3</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Handcrafted Excellence</h4>
+                                <p class="text-gray-600">Master artisans bring each piece to life with precision and care.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 bg-gradient-to-r from-green-800 to-green-600 text-white">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="luxury-font text-4xl font-bold mb-6">Experience SILVI</h2>
+            <p class="text-xl mb-8 opacity-90">Discover the perfect blend of tradition and innovation in our luxury collections.</p>
+            <a href="products.html" class="bg-white text-green-800 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all inline-flex items-center space-x-2">
+                <span>Explore Collections</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 overflow-y-auto transform translate-x-full transition-transform">
+        <div class="p-6 border-b">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-semibold">Shopping Cart</h3>
+                <button class="cart-close p-2 hover:bg-gray-100 rounded-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="cart-items flex-1"></div>
+        <div class="p-6 border-t">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-lg font-semibold">Total:</span>
+                <span class="cart-total text-2xl font-bold text-green-800">$0.00</span>
+            </div>
+            <button class="w-full btn-luxury text-white py-3 rounded-full text-lg font-semibold checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

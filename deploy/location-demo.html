@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Services Demo - SILVI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel=\"stylesheet">
+    <style>
+        :root {
+            --sage-green: #9CAF88;
+            --champagne-beige: #F5F1E8;
+            --deep-forest: #4A5D3A;
+            --pearl-white: #FEFCF8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--pearl-white) 0%, var(--champagne-beige) 100%);
+        }
+        
+        .luxury-font { font-family: 'Playfair Display', serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-luxury {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-luxury:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-5 backdrop-blur-lg bg-white/90">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="luxury-font text-3xl font-bold gradient-text">SILVI</a>
+            <div class="text-lg font-medium text-gray-600">Location Services Demo</div>
+        </div>
+    </nav>
+
+    <!-- Demo Section -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="luxury-font text-4xl md:text-5xl font-bold gradient-text mb-6">Location Services</h1>
+                <p class="text-xl text-gray-600">Test our integrated Indian pincode database and delivery services</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Pincode Validator -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="luxury-font text-2xl font-bold mb-6">Pincode Validator</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="pincode-input" placeholder="Enter 6-digit PIN code" maxlength="6" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800">
+                        <button onclick="validatePincode()" class="btn-luxury text-white px-6 py-3 rounded-lg font-semibold w-full">Validate</button>
+                        <div id="pincode-result" class="mt-4"></div>
+                    </div>
+                </div>
+
+                <!-- Delivery Checker -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="luxury-font text-2xl font-bold mb-6">Delivery Checker</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="delivery-input" placeholder="Enter PIN code for delivery check" maxlength="6" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800">
+                        <input type="number" id="order-value" placeholder="Order value (₹)" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800">
+                        <button onclick="checkDelivery()" class="btn-luxury text-white px-6 py-3 rounded-lg font-semibold w-full">Check Delivery</button>
+                        <div id="delivery-result" class="mt-4"></div>
+                    </div>
+                </div>
+
+                <!-- Location Search -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="luxury-font text-2xl font-bold mb-6">Location Search</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="search-input" placeholder="Search by city, district, or post office" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800">
+                        <button onclick="searchLocations()" class="btn-luxury text-white px-6 py-3 rounded-lg font-semibold w-full">Search</button>
+                        <div id="search-results" class="mt-4 max-h-64 overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- Sample Pincodes -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="luxury-font text-2xl font-bold mb-6">Sample PIN Codes</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Delhi:</strong> 110001, 110016, 110017, 110019</p>
+                        <p><strong>Mumbai:</strong> 400001, 400050, 400051</p>
+                        <p><strong>Bangalore:</strong> 560001, 560025, 560034</p>
+                        <p><strong>Chennai:</strong> 600001, 600017, 600020</p>
+                        <p><strong>Hyderabad:</strong> 500001, 500016, 500028</p>
+                        <p><strong>Pune:</strong> 411001, 411007, 411028</p>
+                        <p><strong>Ahmedabad:</strong> 380001, 380015, 380054</p>
+                        <p><strong>Kolkata:</strong> 700001, 700016, 700091</p>
+                        <p><strong>Jaipur:</strong> 302001, 302012, 302015</p>
+                        <p><strong>Lucknow:</strong> 226001, 226016, 226018</p>
+                    </div>
+                    <div class="mt-4">
+                        <button onclick="testRandomPincode()" class="border-2 border-green-800 text-green-800 px-4 py-2 rounded-lg hover:bg-green-800 hover:text-white transition-all w-full">Test Random PIN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="pincode-loader.js"></script>
+    <script src="location-service.js"></script>
+    <script>
+        function validatePincode() {
+            const pincode = document.getElementById('pincode-input').value;
+            const resultDiv = document.getElementById('pincode-result');
+            
+            if (!pincode || pincode.length !== 6) {
+                resultDiv.innerHTML = '<div class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">Please enter a valid 6-digit PIN code</div>';
+                return;
+            }
+
+            const location = locationService.validatePincode(pincode);
+            
+            if (location) {
+                resultDiv.innerHTML = `
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="text-green-800 font-semibold mb-2">✓ Valid PIN Code</div>
+                        <div class="text-sm text-green-700">
+                            <p><strong>Post Office:</strong> ${location.PostOfficeName}</p>
+                            <p><strong>City:</strong> ${location.City}</p>
+                            <p><strong>District:</strong> ${location.District}</p>
+                            <p><strong>State:</strong> ${location.State}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = '<div class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">Invalid PIN code or not in our database</div>';
+            }
+        }
+
+        function checkDelivery() {
+            const pincode = document.getElementById('delivery-input').value;
+            const orderValue = parseFloat(document.getElementById('order-value').value) || 0;
+            const resultDiv = document.getElementById('delivery-result');
+            
+            if (!pincode || pincode.length !== 6) {
+                resultDiv.innerHTML = '<div class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">Please enter a valid 6-digit PIN code</div>';
+                return;
+            }
+
+            const deliveryInfo = locationService.checkDeliveryAvailability(pincode);
+            const shippingInfo = locationService.getShippingCost(pincode, orderValue);
+            
+            if (deliveryInfo.available) {
+                resultDiv.innerHTML = `
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="text-green-800 font-semibold mb-2">✓ Delivery Available</div>
+                        <div class="text-sm text-green-700">
+                            <p><strong>Location:</strong> ${deliveryInfo.location.City}, ${deliveryInfo.location.State}</p>
+                            <p><strong>Estimated Delivery:</strong> ${deliveryInfo.estimatedDays}</p>
+                            <p><strong>Shipping Cost:</strong> ${shippingInfo.cost === 0 ? 'Free' : '₹' + shippingInfo.cost}</p>
+                            ${shippingInfo.cost > 0 ? '<p class="text-xs mt-1">Free shipping on orders above ₹2000</p>' : ''}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="text-red-800 font-semibold mb-2">✗ Delivery Not Available</div>
+                        <div class="text-sm text-red-700">${deliveryInfo.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function searchLocations() {
+            const query = document.getElementById('search-input').value;
+            const resultDiv = document.getElementById('search-results');
+            
+            if (!query || query.length < 2) {
+                resultDiv.innerHTML = '<div class="text-gray-500 text-sm">Enter at least 2 characters to search</div>';
+                return;
+            }
+
+            const results = locationService.searchLocations(query);
+            
+            if (results.length > 0) {
+                resultDiv.innerHTML = results.map(location => `
+                    <div class="p-3 border-b border-gray-200 hover:bg-gray-50">
+                        <div class="font-semibold">${location.PostOfficeName}</div>
+                        <div class="text-sm text-gray-600">${location.City}, ${location.District}, ${location.State}</div>
+                        <div class="text-xs text-green-600">PIN: ${location.Pincode}</div>
+                    </div>
+                `).join('');
+            } else {
+                resultDiv.innerHTML = '<div class="text-gray-500 text-sm">No locations found</div>';
+            }
+        }
+
+        function testRandomPincode() {
+            const samplePincodes = ['110001', '400001', '560001', '600001', '500001', '411001', '380001', '700001', '302001', '226001'];
+            const randomPincode = samplePincodes[Math.floor(Math.random() * samplePincodes.length)];
+            
+            document.getElementById('pincode-input').value = randomPincode;
+            document.getElementById('delivery-input').value = randomPincode;
+            document.getElementById('order-value').value = Math.floor(Math.random() * 5000) + 500;
+            
+            validatePincode();
+            checkDelivery();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add enter key support
+            document.getElementById('pincode-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') validatePincode();
+            });
+            
+            document.getElementById('delivery-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkDelivery();
+            });
+            
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchLocations();
+            });
+        });
+    </script>
+</body>
+</html>

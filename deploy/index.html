@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+    <meta name="apple-mobile-web-app-title" content="SILVI"/>
+    <title>SILVI - Luxury Women Clothing</title>
+    <link rel="apple-touch-icon" href="https://via.placeholder.com/180x180/9CAF88/FFFFFF?text=SILVI"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    
+    <style>
+        :root {
+            --sage-green: #9CAF88;
+            --champagne-beige: #F5F1E8;
+            --deep-forest: #4A5D3A;
+            --pearl-white: #FEFCF8;
+            --warm-gold: #D4AF37;
+            --charcoal: #2C2C2C;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--pearl-white) 0%, var(--champagne-beige) 100%);
+            min-height: 100vh;
+        }
+        
+        .luxury-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(156, 175, 136, 0.1) 0%, rgba(245, 241, 232, 0.3) 100%),
+                        url('resources/hero-bg.jpg') center/cover;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(156, 175, 136, 0.1) 0%, 
+                rgba(245, 241, 232, 0.2) 25%, 
+                rgba(254, 252, 248, 0.3) 50%, 
+                rgba(156, 175, 136, 0.1) 75%, 
+                rgba(245, 241, 232, 0.2) 100%);
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .silvi-logo {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--champagne-beige) 50%, var(--sage-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .floating-nav {
+            backdrop-filter: blur(20px);
+            background: rgba(254, 252, 248, 0.9);
+            border-bottom: 1px solid rgba(156, 175, 136, 0.2);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .typewriter-cursor {
+            color: var(--sage-green);
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(156, 175, 136, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .luxury-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: var(--sage-green);
+        }
+        
+        .btn-luxury {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-luxury:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 93, 58, 0.3);
+        }
+        
+        .cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .cart-sidebar.active {
+            transform: translateX(0);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-forest) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .aurora-bg {
+            background: linear-gradient(45deg, 
+                var(--sage-green) 0%, 
+                var(--champagne-beige) 25%, 
+                var(--pearl-white) 50%, 
+                var(--champagne-beige) 75%, 
+                var(--sage-green) 100%);
+            background-size: 400% 400%;
+            animation: auroraFlow 12s ease-in-out infinite;
+        }
+        
+        @keyframes auroraFlow {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="floating-nav fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="luxury-font text-3xl font-bold silvi-logo">
+                SILVI
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-gray-800 hover:text-green-800 transition-colors font-medium">Home</a>
+                <a href="products.html" class="text-gray-800 hover:text-green-800 transition-colors font-medium">Collections</a>
+                <a href="brand.html" class="text-gray-800 hover:text-green-800 transition-colors font-medium">Heritage</a>
+                <a href="#contact" class="text-gray-800 hover:text-green-800 transition-colors font-medium">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="nav-user-section">
+                    <div class="flex items-center space-x-4">
+                        <button class="login-btn text-gray-700 hover:text-green-800 font-medium">Login</button>
+                        <button class="register-btn btn-luxury px-4 py-2 rounded-full text-sm">Sign Up</button>
+                    </div>
+                </div>
+                <button class="cart-toggle p-2 hover:bg-gray-100 rounded-full transition-colors relative">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9"></path>
+                    </svg>
+                    <span class="cart-count absolute -top-1 -right-1 bg-green-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" style="display: none;">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Search Button -->
+    <button class="search-toggle fixed top-24 right-6 z-40 bg-white shadow-lg p-3 rounded-full hover:shadow-xl transition-all duration-300 border border-gray-200">
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center pt-20">
+        <div class="hero-content max-w-7xl mx-auto px-6 text-center">
+            <div class="mb-8">
+                <h1 class="luxury-font text-6xl md:text-8xl font-bold silvi-logo mb-6">
+                    SILVI
+                </h1>
+                <div class="text-2xl md:text-3xl text-gray-700 mb-8 h-12">
+                    <span class="hero-typewriter"></span>
+                </div>
+                <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    Where luxury meets timeless elegance. Discover our curated collection of premium women's clothing, 
+                    crafted with artisanal precision and sustainable consciousness.
+                </p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <a href="products.html" class="btn-luxury px-8 py-4 rounded-full text-lg font-semibold inline-flex items-center space-x-2">
+                    <span>Explore Collections</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+                <a href="brand.html" class="border-2 border-green-800 text-green-800 px-8 py-4 rounded-full text-lg font-semibold hover:bg-green-800 hover:text-white transition-all duration-300">
+                    Our Heritage
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Collections -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="luxury-font text-4xl md:text-5xl font-bold gradient-text mb-6">
+                    Featured Collections
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Discover our signature collections, where Western sophistication meets traditional elegance
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="luxury-card rounded-2xl overflow-hidden scroll-reveal">
+                    <div class="relative h-96 overflow-hidden">
+                        <img src="https://kimi-web-img.moonshot.cn/img/fab-fashions.com/053a19dcbf4b666de7c6cc7ae385f01771262404.jpg" alt="Traditional Collection" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 text-white">
+                            <h3 class="luxury-font text-3xl font-bold mb-2">Traditional Elegance</h3>
+                            <p class="text-lg opacity-90">Timeless pieces with cultural heritage</p>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Discover our traditional collection featuring elegant gowns, sophisticated dresses, 
+                            and cultural pieces crafted with the finest materials and attention to detail.
+                        </p>
+                        <a href="products.html?category=traditional" class="btn-luxury px-6 py-3 rounded-full inline-flex items-center space-x-2">
+                            <span>Explore Traditional</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="luxury-card rounded-2xl overflow-hidden scroll-reveal">
+                    <div class="relative h-96 overflow-hidden">
+                        <img src="https://kimi-web-img.moonshot.cn/img/antoninias.com/b1edd1876fabc02130948278f0ab95f443dbc512.jpg" alt="Western Collection" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 text-white">
+                            <h3 class="luxury-font text-3xl font-bold mb-2">Western Sophistication</h3>
+                            <p class="text-lg opacity-90">Contemporary luxury with timeless appeal</p>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Experience our Western collection featuring premium denim, sophisticated tailoring, 
+                            and contemporary pieces designed for the modern luxury lifestyle.
+                        </p>
+                        <a href="products.html?category=western" class="btn-luxury px-6 py-3 rounded-full inline-flex items-center space-x-2">
+                            <span>Explore Western</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="py-20 px-6 aurora-bg">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="luxury-font text-4xl md:text-5xl font-bold text-white mb-6">
+                    New Arrivals
+                </h2>
+                <p class="text-xl text-white/90 max-w-3xl mx-auto">
+                    Discover our latest luxury pieces, crafted with premium materials and exceptional attention to detail
+                </p>
+            </div>
+            
+            <div class="splide" id="new-arrivals-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="product-card bg-white rounded-2xl overflow-hidden shadow-lg mx-4">
+                                <div class="relative overflow-hidden">
+                                    <img src="https://kimi-web-img.moonshot.cn/img/www.oliviabottega.com/d08d7feadfba6f4c0cb9b959fbc935695a725cc2.jpg" alt="Luxury Cocktail Dress" class="w-full h-80 object-cover transition-transform duration-500 hover:scale-110"/>
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-green-800 text-white px-3 py-1 rounded-full text-sm font-medium">New</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="luxury-font text-xl font-semibold mb-2">Luxury Cocktail Dress</h3>
+                                    <p class="text-gray-600 mb-4">Elegant cocktail dress with premium detailing</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-2xl font-bold text-green-800">$675</span>
+                                        <div class="flex space-x-2">
+                                            <a href="product-detail.html?id=5" class="border border-green-800 text-green-800 px-3 py-1 rounded-full text-xs hover:bg-green-800 hover:text-white transition-all">
+                                                View
+                                            </a>
+                                            <button onclick="store.addToCart(5)" class="btn-luxury px-3 py-1 rounded-full text-xs">
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="product-card bg-white rounded-2xl overflow-hidden shadow-lg mx-4">
+                                <div class="relative overflow-hidden">
+                                    <img src="https://kimi-web-img.moonshot.cn/img/content.woolovers.com/61c3079205572af1fb3d9a12237f88890557fe15.jpg" alt="Cashmere Sweater" class="w-full h-80 object-cover transition-transform duration-500 hover:scale-110"/>
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-green-800 text-white px-3 py-1 rounded-full text-sm font-medium">New</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="luxury-font text-xl font-semibold mb-2">Cashmere Blend Sweater</h3>
+                                    <p class="text-gray-600 mb-4">Luxurious cashmere blend with sophisticated styling</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-2xl font-bold text-green-800">$425</span>
+                                        <div class="flex space-x-2">
+                                            <a href="product-detail.html?id=7" class="border border-green-800 text-green-800 px-3 py-1 rounded-full text-xs hover:bg-green-800 hover:text-white transition-all">
+                                                View
+                                            </a>
+                                            <button onclick="store.addToCart(7)" class="btn-luxury px-3 py-1 rounded-full text-xs">
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="product-card bg-white rounded-2xl overflow-hidden shadow-lg mx-4">
+                                <div class="relative overflow-hidden">
+                                    <img src="https://kimi-web-img.moonshot.cn/img/ae01.alicdn.com/aeb7f3c45b044198a497a1b41cb46f136bd353cf.jpg" alt="Luxury Crossbody" class="w-full h-80 object-cover transition-transform duration-500 hover:scale-110"/>
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-green-800 text-white px-3 py-1 rounded-full text-sm font-medium">New</span>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="luxury-font text-xl font-semibold mb-2">Luxury Crossbody Bag</h3>
+                                    <p class="text-gray-600 mb-4">Compact luxury crossbody with premium details</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-2xl font-bold text-green-800">$545</span>
+                                        <div class="flex space-x-2">
+                                            <a href="product-detail.html?id=11" class="border border-green-800 text-green-800 px-3 py-1 rounded-full text-xs hover:bg-green-800 hover:text-white transition-all">
+                                                View
+                                            </a>
+                                            <button onclick="store.addToCart(11)" class="btn-luxury px-3 py-1 rounded-full text-xs">
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story Teaser -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="luxury-card rounded-2xl overflow-hidden scroll-reveal">
+                <div class="grid lg:grid-cols-2 items-center">
+                    <div class="p-12">
+                        <h2 class="luxury-font text-4xl font-bold gradient-text mb-6">
+                            Artisanal Heritage
+                        </h2>
+                        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                            SILVI represents the pinnacle of luxury fashion, where traditional craftsmanship meets contemporary design. 
+                            Each piece is meticulously crafted using the finest materials, ensuring that every garment tells a story 
+                            of elegance, sophistication, and timeless beauty.
+                        </p>
+                        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                            Our commitment to sustainable luxury drives us to source materials responsibly and work with 
+                            artisanal makers who share our values of quality, authenticity, and environmental consciousness.
+                        </p>
+                        <a href="brand.html" class="btn-luxury px-8 py-4 rounded-full text-lg font-semibold inline-flex items-center space-x-2">
+                            <span>Discover Our Story</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="relative h-96 lg:h-full">
+                        <img src="https://kimi-web-img.moonshot.cn/img/www.newyorkdress.com/2c238ce0ab358708d5d534510cd12de62c3c999d.jpg" alt="Artisan Craftsmanship" class="w-full h-full object-cover"/>
+                        <div class="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-white/20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-20 px-6 bg-gradient-to-r from-green-50 to-green-100">
+        <div class="max-w-4xl mx-auto text-center scroll-reveal">
+            <h2 class="luxury-font text-4xl font-bold gradient-text mb-6">
+                Stay Connected
+            </h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Be the first to discover new collections, exclusive previews, and luxury fashion insights
+            </p>
+            <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+                <input type="email" placeholder="Enter your email address" class="flex-1 px-6 py-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-transparent"/>
+                <button type="submit" class="btn-luxury px-8 py-4 rounded-full font-semibold">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="luxury-font text-3xl font-bold mb-4 silvi-logo" style="background: linear-gradient(135deg, var(--sage-green) 0%, var(--champagne-beige) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                SILVI
+            </div>
+            <p class="text-gray-400 mb-8">
+                Luxury Women Clothing - Where elegance meets craftsmanship
+            </p>
+            <div class="flex justify-center space-x-8 mb-8">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+                    </svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"></path>
+                    </svg>
+                </a>
+                <a href="https://www.instagram.com/silvi_silvers?igsh=MWhwcXkycXdxZXZwMA==" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+                    </svg>
+                </a>
+            </div>
+            <p class="text-gray-500 text-sm">
+                © 2024 SILVI. All rights reserved. Crafted with luxury and precision.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-sidebar fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 overflow-y-auto">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-semibold text-gray-900">Shopping Cart</h3>
+                <div class="flex items-center space-x-2">
+                    <button class="wishlist-toggle p-2 hover:bg-gray-100 rounded-full relative">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span class="wishlist-count absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center" style="display: none;">0</span>
+                    </button>
+                    <button class="cart-close p-2 hover:bg-gray-100 rounded-full">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cart-items flex-1">
+            <!-- Cart items will be populated by JavaScript -->
+        </div>
+        
+        <div class="p-6 border-t border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-lg font-semibold">Total:</span>
+                <span class="cart-total text-2xl font-bold text-green-800">₹0.00</span>
+            </div>
+            <button class="w-full btn-luxury py-3 rounded-full text-lg font-semibold checkout-btn">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    
+    <!-- Pincode Integration Scripts -->
+    <script src="csv-pincode-loader.js"></script>
+    <script src="location-service.js"></script>
+    <script src="pincode-integration.js"></script>
+    
+    <script>
+        // Initialize carousel
+        document.addEventListener('DOMContentLoaded', function() {
+            new Splide('#new-arrivals-carousel', {
+                type: 'loop',
+                perPage: 3,
+                perMove: 1,
+                gap: '2rem',
+                autoplay: true,
+                interval: 4000,
+                breakpoints: {
+                    768: {
+                        perPage: 1,
+                    },
+                    1024: {
+                        perPage: 2,
+                    }
+                }
+            }).mount();
+        });
+    </script>
+
+</body>
+</html>

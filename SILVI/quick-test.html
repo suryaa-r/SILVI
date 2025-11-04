@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Pincode Test</title>
+</head>
+<body>
+    <h1>Quick Test</h1>
+    <input type="text" id="pin" value="691013" placeholder="Enter pincode">
+    <button onclick="test()">Test</button>
+    <div id="result"></div>
+
+    <script src="csv-pincode-loader.js"></script>
+    <script src="location-service.js"></script>
+    
+    <script>
+        async function test() {
+            const pin = document.getElementById('pin').value;
+            const result = document.getElementById('result');
+            
+            try {
+                result.innerHTML = 'Testing...';
+                const info = await locationService.validatePincode(pin);
+                result.innerHTML = info ? `Found: ${info.City}, ${info.State}` : 'Not found';
+            } catch (e) {
+                result.innerHTML = 'Error: ' + e.message;
+                console.error(e);
+            }
+        }
+        
+        // Auto test after 2 seconds
+        setTimeout(test, 2000);
+    </script>
+</body>
+</html>
