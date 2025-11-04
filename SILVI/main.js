@@ -1,3 +1,90 @@
+// Email Service Functions
+function sendVerificationEmail(email, name, code) {
+    const emailData = {
+        to: email,
+        subject: 'Verify Your SILVI Account',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fa;">
+                <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+                    <h1 style="color: #9CAF88; font-size: 32px; margin-bottom: 20px;">SILVI</h1>
+                    <h2 style="color: #333; margin-bottom: 20px;">Welcome ${name}!</h2>
+                    <p style="color: #666; font-size: 16px; margin-bottom: 30px;">Please verify your email address to complete your registration.</p>
+                    <div style="background: #f0f8f0; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="color: #4A5D3A; margin: 0;">Your Verification Code:</h3>
+                        <div style="font-size: 32px; font-weight: bold; color: #9CAF88; margin: 10px 0; letter-spacing: 3px;">${code}</div>
+                    </div>
+                    <p style="color: #666; font-size: 14px;">This code will expire in 10 minutes.</p>
+                </div>
+            </div>
+        `
+    };
+    
+    // Simulate email sending (replace with actual email service)
+    console.log('Verification Email Sent:', emailData);
+    alert(`Verification email sent to ${email}\nCode: ${code}`);
+}
+
+function sendWelcomeEmail(email, name) {
+    const emailData = {
+        to: email,
+        subject: 'Welcome to SILVI - Your Luxury Fashion Journey Begins!',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fa;">
+                <div style="background: white; padding: 30px; border-radius: 10px;">
+                    <h1 style="color: #9CAF88; font-size: 32px; text-align: center; margin-bottom: 20px;">SILVI</h1>
+                    <h2 style="color: #333; margin-bottom: 20px;">Welcome to the SILVI Family, ${name}!</h2>
+                    <p style="color: #666; font-size: 16px; line-height: 1.6;">Thank you for joining SILVI, where luxury meets timeless elegance. Your account has been successfully created!</p>
+                    <div style="background: linear-gradient(135deg, #9CAF88 0%, #4A5D3A 100%); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                        <h3 style="color: white; margin: 0;">Exclusive Welcome Offer</h3>
+                        <p style="color: white; margin: 10px 0;">Get 15% off on your first purchase!</p>
+                        <div style="background: white; color: #4A5D3A; padding: 10px; border-radius: 5px; font-weight: bold; display: inline-block;">Code: WELCOME15</div>
+                    </div>
+                    <p style="color: #666; font-size: 16px; line-height: 1.6;">Explore our curated collections of premium women's clothing, crafted with artisanal precision and sustainable consciousness.</p>
+                </div>
+            </div>
+        `
+    };
+    
+    console.log('Welcome Email Sent:', emailData);
+}
+
+function sendThankYouEmail(email) {
+    const emailData = {
+        to: email,
+        subject: 'Thank You for Subscribing to SILVI!',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fa;">
+                <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+                    <h1 style="color: #9CAF88; font-size: 32px; margin-bottom: 20px;">SILVI</h1>
+                    <h2 style="color: #333; margin-bottom: 20px;">Thank You for Subscribing!</h2>
+                    <p style="color: #666; font-size: 16px; margin-bottom: 30px;">Welcome to the SILVI family! You're now part of an exclusive community that appreciates luxury, elegance, and timeless fashion.</p>
+                    <div style="background: linear-gradient(135deg, #9CAF88 0%, #4A5D3A 100%); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="color: white; margin: 0 0 10px 0;">What to Expect:</h3>
+                        <ul style="color: white; text-align: left; margin: 0; padding-left: 20px;">
+                            <li>Early access to new collections</li>
+                            <li>Exclusive discounts and offers</li>
+                            <li>Style tips and fashion insights</li>
+                            <li>VIP invitations to special events</li>
+                        </ul>
+                    </div>
+                    <div style="background: #f0f8f0; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p style="color: #4A5D3A; margin: 0; font-weight: bold;">Subscriber Special: 10% OFF</p>
+                        <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Use code: SUBSCRIBER10 on your next purchase</p>
+                    </div>
+                    <p style="color: #666; font-size: 14px;">Follow us on Instagram @silvi_silvers for daily style inspiration!</p>
+                </div>
+            </div>
+        `
+    };
+    
+    console.log('Thank You Email Sent:', emailData);
+    
+    // Show user confirmation
+    setTimeout(() => {
+        alert('Thank you email sent! Check your inbox for exclusive offers.');
+    }, 1000);
+}
+
 // User Data Collection
 const userData = {
     sessionId: Date.now() + Math.random().toString(36).substr(2, 9),
@@ -248,25 +335,67 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Newsletter form
+    // Enhanced Newsletter form
     const newsletterForm = document.querySelector('form');
     newsletterForm?.addEventListener('submit', (e) => {
         e.preventDefault();
         const email = e.target.querySelector('input[type="email"]').value;
         if (email) {
-            // Collect email for marketing
-            userData.collectData('newsletter_signup', { email: email });
+            // Show subscription options modal
+            const modal = createModal('Complete Your Subscription', `
+                <div class="space-y-4">
+                    <p class="text-gray-600">Get exclusive access to:</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" checked class="text-green-800" id="emailUpdates">
+                            <span class="text-sm">Email updates on new collections</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="text-green-800" id="smsOffers">
+                            <span class="text-sm">SMS alerts for flash sales</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="text-green-800" id="whatsappUpdates">
+                            <span class="text-sm">WhatsApp updates (Enter mobile below)</span>
+                        </label>
+                    </div>
+                    <input type="tel" id="subscriberPhone" placeholder="Mobile Number (Optional)" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800">
+                    <button onclick="completeSubscription('${email}')" class="w-full btn-luxury text-white py-2 rounded-lg">Subscribe Now</button>
+                </div>
+            `);
             
-            // Store email separately for marketing
-            let emails = JSON.parse(localStorage.getItem('silvi_emails') || '[]');
-            if (!emails.includes(email)) {
-                emails.push(email);
-                localStorage.setItem('silvi_emails', JSON.stringify(emails));
-            }
-            
-            store.showNotification('Thank you for subscribing!');
-            e.target.reset();
+            window.completeSubscription = function(email) {
+                const subscriptionData = {
+                    email: email,
+                    emailUpdates: document.getElementById('emailUpdates').checked,
+                    smsOffers: document.getElementById('smsOffers').checked,
+                    whatsappUpdates: document.getElementById('whatsappUpdates').checked,
+                    phone: document.getElementById('subscriberPhone').value
+                };
+                
+                // Collect subscription data
+                userData.collectData('newsletter_signup', subscriptionData);
+                
+                // Store email
+                let emails = JSON.parse(localStorage.getItem('silvi_emails') || '[]');
+                if (!emails.includes(email)) {
+                    emails.push(email);
+                    localStorage.setItem('silvi_emails', JSON.stringify(emails));
+                }
+                
+                // Store subscription preferences
+                let subscribers = JSON.parse(localStorage.getItem('silvi_subscribers') || '[]');
+                subscribers.push(subscriptionData);
+                localStorage.setItem('silvi_subscribers', JSON.stringify(subscribers));
+                
+                // Send automated thank you email
+                sendThankYouEmail(email);
+                
+                store.showNotification('Successfully subscribed! Check your email for confirmation.');
+                document.body.removeChild(modal);
+            };
         }
+        e.target.reset();
     });
     
     // Checkout functionality
@@ -305,35 +434,136 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerBtn = document.querySelector('.register-btn');
     
     loginBtn?.addEventListener('click', () => {
-        const modal = createModal('Login', `
-            <form class="space-y-4">
-                <input type="email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
-                <input type="password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
-                <button type="submit" class="w-full btn-luxury text-white py-2 rounded-lg">Login</button>
+        const modal = createModal('Login with OTP', `
+            <form class="space-y-4" id="loginForm">
+                <div id="phoneStep">
+                    <input type="tel" id="phoneNumber" placeholder="Enter Mobile Number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                    <button type="button" onclick="sendOTP()" class="w-full btn-luxury text-white py-2 rounded-lg mt-2">Send OTP</button>
+                </div>
+                <div id="otpStep" class="hidden">
+                    <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" maxlength="6" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800">
+                    <button type="button" onclick="verifyOTP()" class="w-full btn-luxury text-white py-2 rounded-lg mt-2">Verify OTP</button>
+                    <p class="text-sm text-gray-500 mt-2">OTP sent to <span id="sentTo"></span></p>
+                </div>
             </form>
         `);
         
-        modal.querySelector('form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            store.showNotification('Login successful!');
-            document.body.removeChild(modal);
-        });
+        window.sendOTP = function() {
+            const phone = document.getElementById('phoneNumber').value;
+            if (phone.length < 10) {
+                alert('Please enter valid mobile number');
+                return;
+            }
+            
+            // Generate random OTP
+            window.currentOTP = Math.floor(100000 + Math.random() * 900000);
+            
+            // Simulate SMS (in real app, call SMS API)
+            console.log('OTP sent:', window.currentOTP);
+            alert(`OTP sent to ${phone}: ${window.currentOTP}`);
+            
+            document.getElementById('phoneStep').classList.add('hidden');
+            document.getElementById('otpStep').classList.remove('hidden');
+            document.getElementById('sentTo').textContent = phone;
+            
+            userData.collectData('otp_sent', { phone: phone });
+        };
+        
+        window.verifyOTP = function() {
+            const enteredOTP = document.getElementById('otpCode').value;
+            if (enteredOTP == window.currentOTP) {
+                userData.collectData('login_success', { phone: document.getElementById('phoneNumber').value });
+                store.showNotification('Login successful!');
+                document.body.removeChild(modal);
+                
+                // Update UI to show logged in state
+                document.querySelector('.login-btn').textContent = 'Account';
+            } else {
+                alert('Invalid OTP. Please try again.');
+            }
+        };
     });
     
     registerBtn?.addEventListener('click', () => {
-        const modal = createModal('Sign Up', `
-            <form class="space-y-4">
-                <input type="text" placeholder="Full Name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
-                <input type="email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
-                <input type="password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
-                <button type="submit" class="w-full btn-luxury text-white py-2 rounded-lg">Sign Up</button>
+        const modal = createModal('Create Account', `
+            <form class="space-y-4" id="signupForm">
+                <input type="text" id="fullName" placeholder="Full Name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                <input type="email" id="email" placeholder="Email Address" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                <input type="tel" id="mobile" placeholder="Mobile Number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800" required>
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="newsletter" class="text-green-800">
+                    <label for="newsletter" class="text-sm">Subscribe to newsletter for exclusive offers</label>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="whatsapp" class="text-green-800">
+                    <label for="whatsapp" class="text-sm">Get updates on WhatsApp</label>
+                </div>
+                <button type="submit" class="w-full btn-luxury text-white py-2 rounded-lg">Create Account</button>
             </form>
         `);
         
         modal.querySelector('form').addEventListener('submit', (e) => {
             e.preventDefault();
-            store.showNotification('Account created successfully!');
+            
+            const formData = {
+                name: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                mobile: document.getElementById('mobile').value,
+                newsletter: document.getElementById('newsletter').checked,
+                whatsapp: document.getElementById('whatsapp').checked
+            };
+            
+            // Email verification step
+            const verificationCode = Math.floor(100000 + Math.random() * 900000);
+            
+            // Send verification email (simulated)
+            sendVerificationEmail(formData.email, formData.name, verificationCode);
+            
+            // Show verification modal
             document.body.removeChild(modal);
+            const verifyModal = createModal('Verify Your Email', `
+                <div class="text-center space-y-4">
+                    <p class="text-gray-600">We've sent a verification code to:</p>
+                    <p class="font-semibold text-green-800">${formData.email}</p>
+                    <input type="text" id="verificationCode" placeholder="Enter 6-digit code" maxlength="6" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800 text-center text-lg">
+                    <button onclick="verifyEmail(${verificationCode}, '${JSON.stringify(formData).replace(/'/g, "\\'")}')") class="w-full btn-luxury text-white py-2 rounded-lg">Verify Email</button>
+                    <p class="text-xs text-gray-500">Check your spam folder if you don't see the email</p>
+                </div>
+            `);
+            
+            window.verifyEmail = function(correctCode, userDataStr) {
+                const enteredCode = document.getElementById('verificationCode').value;
+                const userData = JSON.parse(userDataStr);
+                
+                if (enteredCode == correctCode) {
+                    // Store user data after verification
+                    userData.collectData('user_registration', userData);
+                    
+                    // Add to email list if subscribed
+                    if (userData.newsletter) {
+                        let emails = JSON.parse(localStorage.getItem('silvi_emails') || '[]');
+                        if (!emails.includes(userData.email)) {
+                            emails.push(userData.email);
+                            localStorage.setItem('silvi_emails', JSON.stringify(emails));
+                        }
+                    }
+                    
+                    // Store user profile
+                    localStorage.setItem('silvi_user', JSON.stringify(userData));
+                    
+                    // Send welcome email
+                    sendWelcomeEmail(userData.email, userData.name);
+                    
+                    store.showNotification('Email verified! Account created successfully!');
+                    document.body.removeChild(verifyModal);
+                    
+                    // Update UI
+                    document.querySelector('.login-btn').textContent = 'Account';
+                    document.querySelector('.register-btn').textContent = userData.name.split(' ')[0];
+                } else {
+                    alert('Invalid verification code. Please try again.');
+                }
+            };
         });
     });
     
